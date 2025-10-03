@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>OAuth Callback Tester</title>
+  <title>App Link Tester</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial; padding: 24px; color:#222; }
     .card { max-width:600px; margin: 24px auto; padding: 18px; border-radius:10px; box-shadow:0 6px 18px rgba(0,0,0,0.08); background:#fff; }
@@ -15,18 +15,18 @@
 </head>
 <body>
   <div class="card">
-    <h2>OAuth Callback Tester</h2>
-    <p>输入要返回给 App 的 <code>code</code>（授权码），然后点击按钮触发回调。</p>
+    <h2>App Link Tester</h2>
+    <p>输入一个 <code>code</code> 参数，点击按钮测试 Universal Link / Intent。</p>
 
     <label for="code">code</label>
     <input id="code" type="text" value="123456" />
 
     <div>
-      <!-- 直接使用 custom scheme 链接（点击会尝试打开 App） -->
-      <a id="openLink" class="btn" href="#">Open App (scheme)</a>
+      <!-- iOS Universal Link -->
+      <a id="iosLink" class="btn" href="#" target="_blank" rel="noopener">Open in iOS (Universal Link)</a>
 
-      <!-- Android Chrome 的 Intent fallback（当 App 未安装时可以打开 Play 商店或回到网页） -->
-      <a id="intentBtn" class="btn secondary" href="#" style="display:none;">Open via Android Intent</a>
+      <!-- Android Intent -->
+      <a id="androidLink" class="btn secondary" href="#">Open in Android (Intent)</a>
     </div>
 
     <div style="margin-top:14px;">
@@ -37,68 +37,66 @@
     <p class="note">
       Tips:
       <ul>
-        <li>确保你的 App 已在设备上注册 scheme：<code>yourapp</code>（或替换为你实际的 scheme）。</li>
-        <li>如果在 Android 上使用 Chrome，可启用 Intent fallback（需设置包名）。</li>
-        <li>如果你的 redirectUri 是 <code>yourapp://auth-callback</code>，那么最终会触发像 <code>yourapp://auth-callback?code=xxxx</code> 的跳转。</li>
+        <li>iOS 使用 Universal Link，例如 <code>https://你的域名/auth-callback?code=xxx</code>。</li>
+        <li>Android 使用 Intent URL，格式 <code>intent://...#Intent;scheme=yourapp;package=com.example.yourapp;end</code>。</li>
+        <li>替换下面 JS 中的 <code>scheme</code> 和 <code>packageName</code> 为你的真实配置。</li>
       </ul>
     </p>
   </div>
 
   <script>
-    const openLink = document.getElementById('openLink');
-    const intentBtn = document.getElementById('intentBtn');
+    const iosLink = document.getElementById('iosLink');
+    const androidLink = document.getElementById('androidLink');
     const autoBtn = document.getElementById('autoBtn');
     const cancelAuto = document.getElementById('cancelAuto');
     const codeInput = document.getElementById('code');
 
-    function buildSchemeUrl(code) {
-  // 获取当前域名（协议 + 主机 + 端口）
-  const origin = window.location.origin;
+    const scheme = "yourapp";                // 你的 scheme
+    const packageName = "com.example.yourapp"; // Android 包名
+    const domain = "aasa-test2.onrender.com";  // Universal Link 域名
 
-  // 拼接回调链接，注意对 code 做 URL encode
-  return `${origin}/auth-callback`;
-}
+    function buildUniversalLink(code) {
+      return `https://${domain}/auth-callback?code=${encodeURIComponent(code)}`;
+    }
 
-
-    function buildIntentUrl(code, packageName) {
-      // Android Chrome intent 方案：当 App 未安装可回退到商店（请替换 package）
-      // 格式: intent://{host_and_path}?{query}#Intent;scheme={scheme};package={package};end
-      // 我这里 host 使用 auth-callback（和你声明的 host 一致），也可按需要调整。
-      const scheme = 'yourapp';
-      const hostAndPath = 'auth-callback';
-      const query = 'code=' + encodeURIComponent(code);
-      return 'intent://' + hostAndPath + '?' + query +
-             '#Intent;scheme=' + scheme + ';package=' + packageName + ';end';
+    function buildIntentUrl(code) {
+      const hostAndPath = "auth-callback";
+      const query = "code=" + encodeURIComponent(code);
+      return `intent://${hostAndPath}?${query}#Intent;scheme=${scheme};package=${packageName};end`;
     }
 
     function updateLinks() {
       const code = codeInput.value || '123456';
-      const schemeUrl = buildSchemeUrl(code);
-      openLink.href = schemeUrl;
-      openLink.textContent = 'Open App (scheme): ' + schemeUrl;
 
-      // 如果你希望显示 Intent 按钮，用你的包名替换 'com.example.yourapp'
-      const myPackage = 'com.example.yourapp'; // TODO: replace with real package if needed
-      intentBtn.href = buildIntentUrl(code, myPackage);
-      intentBtn.textContent = 'Open via Intent for Android';
-      intentBtn.style.display = ''; // show it if you want
+      // iOS Universal Link
+      iosLink.href = buildUniversalLink(code);
+      iosLink.textContent = "Open in iOS (Universal Link): " + iosLink.href;
+
+      // Android Intent
+      androidLink.href = buildIntentUrl(code);
+      androidLink.textContent = "Open in Android (Intent)";
     }
 
-    // 初始
+    // 初始更新
     updateLinks();
     codeInput.addEventListener('input', updateLinks);
 
-    // 点击自动跳转：延迟几秒再跳到 scheme URL（方便用户看到发生了什么）
+    // 自动跳转按钮
     let autoTimer = null;
     autoBtn.addEventListener('click', function() {
       const code = codeInput.value || '123456';
       autoBtn.disabled = true;
       cancelAuto.disabled = false;
+
       autoTimer = setTimeout(function() {
-        // 改用 window.location 触发跳转
-        window.location = buildSchemeUrl(code);
+        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+          window.location.href = buildUniversalLink(code); // iOS Universal Link
+        } else {
+          window.location.href = buildIntentUrl(code); // Android Intent
+        }
       }, 2000);
     });
+
     cancelAuto.addEventListener('click', function() {
       if (autoTimer) {
         clearTimeout(autoTimer);
@@ -107,9 +105,6 @@
         cancelAuto.disabled = true;
       }
     });
-
-    // 当页面从桌面/PC 打开，点击 scheme 链接通常没反应（桌面无 app）
-    // 所以你只在移动设备上测试（手机浏览器）。
   </script>
 </body>
 </html>
