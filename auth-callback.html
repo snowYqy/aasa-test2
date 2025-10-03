@@ -2,44 +2,48 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>App Deep Link Test</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Auth Callback</title>
+    <style>
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial;
+        padding: 24px;
+      }
+      button {
+        padding: 10px 16px;
+        border-radius: 8px;
+        background: #1976d2;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+    </style>
   </head>
   <body>
-    <h1>App Deep Link Test Page</h1>
+    <h2>OAuth Callback</h2>
+    <p>点击按钮唤起 App：</p>
+    <button id="openAppBtn">打开 App</button>
 
-    <!-- iOS Universal Link -->
-    <a href="https://aasa-test2.onrender.com/auth-callback?code=1234567"
-      >打开 App</a
-    >
-
-    <br /><br />
-
-    <!-- Android Intent Link -->
-    <a
-      id="android-link"
-      href="intent://auth-callback?code=1234#Intent;scheme=yourapp;package=com.example.yourapp;end"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      打开 Android App (Intent)
-    </a>
-
-    <br /><br />
-
-    <!-- 或者用按钮点击方式触发 -->
-    <button onclick="openApp()">通过按钮打开</button>
+    <!-- 隐藏 a 标签，用来模拟点击 -->
+    <a href="#" id="hiddenLink" style="display: none"></a>
 
     <script>
-      function openApp() {
-        // iOS Universal Link
-        window.open(
-          "https://aasa-test2.onrender.com/auth-callback?code=5678",
-          "_blank"
-        );
+      const btn = document.getElementById("openAppBtn");
+      const hiddenLink = document.getElementById("hiddenLink");
 
-        // Android Intent（可按需选择）
-        // window.location.href = "intent://auth-callback?code=5678#Intent;scheme=yourapp;package=com.example.yourapp;end";
-      }
+      // 获取 code 参数
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get("code") || "123456";
+
+      // 构建 Universal Link
+      const universalLink = `https://aasa-test2.onrender.com/auth-callback?code=${encodeURIComponent(code)}`;
+
+      btn.addEventListener("click", () => {
+        hiddenLink.href = universalLink;
+        hiddenLink.click(); // 模拟点击，Safari 认为是用户交互
+      });
     </script>
   </body>
 </html>
