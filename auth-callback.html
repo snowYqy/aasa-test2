@@ -38,7 +38,7 @@
       const code = params.get("code") || "123456";
 
       // 构建 Universal Link
-      const universalLink = `https://aasa-test2.onrender.com/auth-callback?code=${encodeURIComponent(code)}`;
+      const universalLink = `https://aasa-test2.onrender.com/auth-callback/AAA`;
 
       btn.addEventListener("click", () => {
         hiddenLink.href = universalLink;
