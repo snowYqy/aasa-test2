@@ -1,110 +1,50 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>App Link Tester</title>
-  <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial; padding: 24px; color:#222; }
-    .card { max-width:600px; margin: 24px auto; padding: 18px; border-radius:10px; box-shadow:0 6px 18px rgba(0,0,0,0.08); background:#fff; }
-    input[type=text] { width:100%; padding:10px 12px; font-size:16px; margin:8px 0 14px; box-sizing:border-box; }
-    button, a.btn { display:inline-block; padding:10px 16px; border-radius:8px; background:#1976D2; color:white; text-decoration:none; border:none; cursor:pointer; }
-    .secondary { background:#4CAF50; margin-left:8px; }
-    .note { color:#666; font-size:13px; margin-top:12px; }
-  </style>
-</head>
-<body>
-  <div class="card">
-    <h2>App Link Tester</h2>
-    <p>输入一个 <code>code</code> 参数，点击按钮测试 Universal Link / Intent。</p>
+  <head>
+    <meta charset="UTF-8" />
+    <title>App Deep Link Test</title>
+  </head>
+  <body>
+    <h1>App Deep Link Test Page</h1>
 
-    <label for="code">code</label>
-    <input id="code" type="text" value="123456" />
+    <!-- iOS Universal Link -->
+    <a
+      id="ios-link"
+      href="https://aasa-test2.onrender.com/auth-callback?code=1234"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      打开 iOS App (Universal Link)
+    </a>
 
-    <div>
-      <!-- iOS Universal Link -->
-      <a id="iosLink" class="btn" href="#" target="_blank" rel="noopener">Open in iOS (Universal Link)</a>
+    <br /><br />
 
-      <!-- Android Intent -->
-      <a id="androidLink" class="btn secondary" href="#">Open in Android (Intent)</a>
-    </div>
+    <!-- Android Intent Link -->
+    <a
+      id="android-link"
+      href="intent://auth-callback?code=1234#Intent;scheme=yourapp;package=com.example.yourapp;end"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      打开 Android App (Intent)
+    </a>
 
-    <div style="margin-top:14px;">
-      <button id="autoBtn" class="btn">Auto redirect in 2s</button>
-      <button id="cancelAuto" class="btn" style="background:#9E9E9E; margin-left:8px;">Cancel</button>
-    </div>
+    <br /><br />
 
-    <p class="note">
-      Tips:
-      <ul>
-        <li>iOS 使用 Universal Link，例如 <code>https://你的域名/auth-callback?code=xxx</code>。</li>
-        <li>Android 使用 Intent URL，格式 <code>intent://...#Intent;scheme=yourapp;package=com.example.yourapp;end</code>。</li>
-        <li>替换下面 JS 中的 <code>scheme</code> 和 <code>packageName</code> 为你的真实配置。</li>
-      </ul>
-    </p>
-  </div>
+    <!-- 或者用按钮点击方式触发 -->
+    <button onclick="openApp()">通过按钮打开</button>
 
-  <script>
-    const iosLink = document.getElementById('iosLink');
-    const androidLink = document.getElementById('androidLink');
-    const autoBtn = document.getElementById('autoBtn');
-    const cancelAuto = document.getElementById('cancelAuto');
-    const codeInput = document.getElementById('code');
+    <script>
+      function openApp() {
+        // iOS Universal Link
+        window.open(
+          "https://aasa-test2.onrender.com/auth-callback?code=5678",
+          "_blank"
+        );
 
-    const scheme = "yourapp";                // 你的 scheme
-    const packageName = "com.example.yourapp"; // Android 包名
-    const domain = "aasa-test2.onrender.com";  // Universal Link 域名
-
-    function buildUniversalLink(code) {
-      return `https://${domain}/auth-callback?code=${encodeURIComponent(code)}`;
-    }
-
-    function buildIntentUrl(code) {
-      const hostAndPath = "auth-callback";
-      const query = "code=" + encodeURIComponent(code);
-      return `intent://${hostAndPath}?${query}#Intent;scheme=${scheme};package=${packageName};end`;
-    }
-
-    function updateLinks() {
-      const code = codeInput.value || '123456';
-
-      // iOS Universal Link
-      iosLink.href = buildUniversalLink(code);
-      iosLink.textContent = "Open in iOS (Universal Link): " + iosLink.href;
-
-      // Android Intent
-      androidLink.href = buildIntentUrl(code);
-      androidLink.textContent = "Open in Android (Intent)";
-    }
-
-    // 初始更新
-    updateLinks();
-    codeInput.addEventListener('input', updateLinks);
-
-    // 自动跳转按钮
-    let autoTimer = null;
-    autoBtn.addEventListener('click', function() {
-      const code = codeInput.value || '123456';
-      autoBtn.disabled = true;
-      cancelAuto.disabled = false;
-
-      autoTimer = setTimeout(function() {
-        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-          window.location.href = buildUniversalLink(code); // iOS Universal Link
-        } else {
-          window.location.href = buildIntentUrl(code); // Android Intent
-        }
-      }, 2000);
-    });
-
-    cancelAuto.addEventListener('click', function() {
-      if (autoTimer) {
-        clearTimeout(autoTimer);
-        autoTimer = null;
-        autoBtn.disabled = false;
-        cancelAuto.disabled = true;
+        // Android Intent（可按需选择）
+        // window.location.href = "intent://auth-callback?code=5678#Intent;scheme=yourapp;package=com.example.yourapp;end";
       }
-    });
-  </script>
-</body>
+    </script>
+  </body>
 </html>
