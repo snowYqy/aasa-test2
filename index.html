@@ -2,42 +2,99 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>App Deep Link Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Universal Link Test</title>
+    <style>
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial;
+        padding: 24px;
+        background: #fef5e5;
+      }
+      .card {
+        max-width: 500px;
+        margin: 50px auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+      input {
+        width: 100%;
+        padding: 8px 12px;
+        font-size: 16px;
+        margin-bottom: 12px;
+        box-sizing: border-box;
+      }
+      button,
+      a.btn {
+        display: inline-block;
+        padding: 10px 16px;
+        border-radius: 8px;
+        background: #1976d2;
+        color: #fff;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+      }
+      button.secondary {
+        background: #4caf50;
+        margin-left: 8px;
+      }
+    </style>
   </head>
   <body>
-    <h1>App Deep Link Test Page</h1>
+    <div class="card">
+      <h2>Universal Link Test</h2>
+      <p>输入测试参数，然后点击按钮尝试唤起 App：</p>
+      <input
+        type="text"
+        id="codeInput"
+        placeholder="输入 code"
+        value="123456"
+      />
 
-    <!-- iOS Universal Link -->
-    <a href="/go.html?code=5678">打开 App</a>
+      <div style="margin-top: 12px">
+        <button id="openBtn">唤起 App</button>
+        <button id="autoBtn" class="secondary">自动跳转 2 秒</button>
+      </div>
 
-    <br /><br />
-
-    <!-- Android Intent Link -->
-    <a
-      id="android-link"
-      href="intent://auth-callback?code=1234#Intent;scheme=yourapp;package=com.example.yourapp;end"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      打开 Android App (Intent)
-    </a>
-
-    <br /><br />
-
-    <!-- 或者用按钮点击方式触发 -->
-    <button onclick="openApp()">通过按钮打开</button>
+      <!-- 隐藏 a 标签，用来模拟点击触发 Universal Link -->
+      <a href="#" id="hiddenLink" style="display: none"></a>
+    </div>
 
     <script>
-      function openApp() {
-        // iOS Universal Link
-        window.open(
-          "https://aasa-test2.onrender.com/auth-callback?code=5678",
-          "_blank"
-        );
+      const openBtn = document.getElementById("openBtn");
+      const autoBtn = document.getElementById("autoBtn");
+      const codeInput = document.getElementById("codeInput");
+      const hiddenLink = document.getElementById("hiddenLink");
 
-        // Android Intent（可按需选择）
-        // window.location.href = "intent://auth-callback?code=5678#Intent;scheme=yourapp;package=com.example.yourapp;end";
+      function buildUniversalLink(code) {
+        // 替换成你的 Universal Link 地址
+        return `https://aasa-test2.onrender.com/auth-callback?code=${encodeURIComponent(code)}`;
       }
+
+      function triggerUniversalLink(code) {
+        const url = buildUniversalLink(code);
+        hiddenLink.href = url;
+        hiddenLink.click(); // 模拟用户点击
+      }
+
+      // 点击按钮
+      openBtn.addEventListener("click", () => {
+        const code = codeInput.value || "123456";
+        triggerUniversalLink(code);
+      });
+
+      // 自动跳转（延迟 2 秒）
+      autoBtn.addEventListener("click", () => {
+        const code = codeInput.value || "123456";
+        setTimeout(() => triggerUniversalLink(code), 2000);
+      });
+
+      // 页面加载时可以选择自动触发
+      // window.onload = () => { triggerUniversalLink(codeInput.value); }
     </script>
   </body>
 </html>
