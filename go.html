@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Go to App</title>
+  </head>
+  <body>
+    <p>Redirecting to App...</p>
+
+    <script>
+      // 从 URL 获取 code 参数
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get("code") || "123456";
+
+      // 构建 Universal Link
+      const url = `https://aasa-test2.onrender.com/auth-callback?code=${encodeURIComponent(code)}`;
+
+      // 延迟 100ms 再跳，确保 Safari 认为这是用户触发
+      setTimeout(() => {
+        window.location.href = url;
+      }, 100);
+    </script>
+  </body>
+</html>
