@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>App Deep Link Test</title>
+  </head>
+  <body>
+    <h1>App Deep Link Test Page</h1>
+
+    <!-- iOS Universal Link -->
+    <a href="https://aasa-test2.onrender.com/auth-callback?code=1234567"
+      >打开 App</a
+    >
+
+    <br /><br />
+
+    <!-- Android Intent Link -->
+    <a
+      id="android-link"
+      href="intent://auth-callback?code=1234#Intent;scheme=yourapp;package=com.example.yourapp;end"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      打开 Android App (Intent)
+    </a>
+
+    <br /><br />
+
+    <!-- 或者用按钮点击方式触发 -->
+    <button onclick="openApp()">通过按钮打开</button>
+
+    <script>
+      function openApp() {
+        // iOS Universal Link
+        window.open(
+          "https://aasa-test2.onrender.com/auth-callback?code=5678",
+          "_blank"
+        );
+
+        // Android Intent（可按需选择）
+        // window.location.href = "intent://auth-callback?code=5678#Intent;scheme=yourapp;package=com.example.yourapp;end";
+      }
+    </script>
+  </body>
+</html>
