@@ -5,60 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Universal Links 测试主页</title>
     <style>
-      body {
-        font-family:
-          -apple-system,
-          BlinkMacSystemFont,
-          Segoe UI,
-          Roboto,
-          Helvetica,
-          Arial,
-          sans-serif;
-        margin: 40px;
-      }
-      a.button {
-        display: inline-block;
-        padding: 12px 16px;
-        background: #0d6efd;
-        color: #fff;
-        text-decoration: none;
-        border-radius: 8px;
-      }
-      code {
-        background: #f5f5f5;
-        padding: 2px 6px;
-        border-radius: 4px;
-      }
-      .note {
-        margin-top: 16px;
-        color: #555;
-      }
+      body { font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif; margin: 40px; }
+      a.button { display: inline-block; padding: 12px 16px; background: #0d6efd; color: #fff; text-decoration: none; border-radius: 8px; }
+      code { background: #f5f5f5; padding: 2px 6px; border-radius: 4px; }
+      .note { margin-top: 16px; color: #555; }
     </style>
   </head>
   <body>
     <h1>Universal Links 测试</h1>
     <p>用于 iOS Universal Links 配置验证的示例站点。</p>
 
-    <p>目标链接：<code>https://aasa-test2.onrender.com/auth-callback</code></p>
-
     <p>
+      目标链接：<code>https://aasa-test2.onrender.com/auth-callback</code>
+    </p>
+
+    <!-- <p>
       <a class="button" href="/auth-callback">前往 /auth-callback</a>
+    </p> -->
+    <p>
+      <a id="openAppBtn" class="button" href="https://aasa-test2.onrender.com/auth-callback">在 App 中打开</a>
     </p>
 
     <div class="note">
       <p>在真机 Safari 中打开更易触发 App 关联（清理剪贴板提示无关）。</p>
       <p>若首次无法拉起，请确保：</p>
       <ul>
-        <li>
-          设备已安装目标 App，且 `Associated Domains` 含
-          `applinks:aasa-test2.onrender.com`。
-        </li>
-        <li>
-          本域名的 `/.well-known/apple-app-site-association` 可被 HTTPS
-          无重定向访问。
-        </li>
+        <li>设备已安装目标 App，且 `Associated Domains` 含 `applinks:aasa-test2.onrender.com`。</li>
+        <li>本域名的 `/.well-known/apple-app-site-association` 可被 HTTPS 无重定向访问。</li>
         <li>App 使用的 `TEAMID.BUNDLEID` 与服务器返回的 `appID` 一致。</li>
       </ul>
     </div>
   </body>
-</html>
+  </html>
+
