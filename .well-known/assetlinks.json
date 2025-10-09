@@ -1,9 +1,25 @@
 [{
-  "relation": ["delegate_permission/common.handle_all_urls"],
-  "target": {
-    "namespace": "android_app",
-    "package_name": "com.konec.smarthome.test",
-    "sha256_cert_fingerprints":
-    ["0C:B1:C4:9F:A0:62:88:EA:70:68:C8:89:8E:55:FD:DA:07:51:E1:88:26:23:57:57:76:11:1F:9E:9E:DD:D5:BD"]
-  }
-}]
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.konec.smarthome.test",
+      "sha256_cert_fingerprints": ["0C:B1:C4:9F:A0:62:88:EA:70:68:C8:89:8E:55:FD:DA:07:51:E1:88:26:23:57:57:76:11:1F:9E:9E:DD:D5:BD"]
+    }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.konec.smarthome.test",
+      "sha256_cert_fingerprints": ["DB:EE:96:3A:99:40:40:D7:8F:7C:45:87:1C:CF:C4:35:BE:99:93:37:96:3B:CC:B3:48:C9:2E:C2:B4:15:1E:69"]
+    }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.konec.smarthome",
+      "sha256_cert_fingerprints": ["DB:EE:96:3A:99:40:40:D7:8F:7C:45:87:1C:CF:C4:35:BE:99:93:37:96:3B:CC:B3:48:C9:2E:C2:B4:15:1E:69"]
+    }
+  },
+]
