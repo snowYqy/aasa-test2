@@ -4,11 +4,19 @@
     "details": [
       {
         "appID": "JP35QN496U.com.konec.smarthome.test",
-        "paths": [ "/auth-callback/*" ]
+         "paths": [
+          "/auth-callback*",
+          "/callback/*",
+          "/open/*"
+        ]
       },
       {
         "appID": "JP35QN496U.com.konec.smarthome",
-        "paths": [ "/auth-callback/*" ]
+        "paths": [
+          "/auth-callback*",
+          "/callback/*",
+          "/open/*"
+        ]
       }
     ]
   }
