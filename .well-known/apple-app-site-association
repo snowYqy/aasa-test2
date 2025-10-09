@@ -5,7 +5,7 @@
       {
         "appID": "JP35QN496U.com.konec.smarthome.test",
          "paths": [
-          "/auth-callback*",
+          "/auth-callback/*",
           "/callback/*",
           "/open/*"
         ]
@@ -13,7 +13,7 @@
       {
         "appID": "JP35QN496U.com.konec.smarthome",
         "paths": [
-          "/auth-callback*",
+          "/auth-callback/*",
           "/callback/*",
           "/open/*"
         ]
